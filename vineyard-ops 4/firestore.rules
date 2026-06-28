@@ -1,0 +1,11 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // App-level access is by operator/manager code (set in Setup), not Firebase Auth.
+    // Anonymous Auth gates raw database access so random visitors can't read/write.
+    // For tighter control, enable Firebase App Check and require it here.
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
